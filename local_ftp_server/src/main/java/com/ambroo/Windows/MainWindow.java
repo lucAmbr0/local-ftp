@@ -1,18 +1,14 @@
 package com.ambroo.Windows;
 
+import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 // import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import java.awt.Dimension;
-import java.awt.Font;
-// import javax.swing.SwingConstants;
 
 public class MainWindow extends JFrame {
 
@@ -39,7 +35,6 @@ public class MainWindow extends JFrame {
     JCheckBox passwordToUploadCheckbox = new JCheckBox("Required to upload files", false);
     JLabel passwordLabel = new JLabel("Password");
     JTextField passwordTextField = new JTextField();
-
     JButton saveSettingsBtn = new JButton("Save");
 
     JPanel verticalSeparator = new JPanel();
@@ -68,7 +63,6 @@ public class MainWindow extends JFrame {
         serverStatePanel.setBounds(0, 31, 220, 93);
         stopServerBtn.setEnabled(false);
         pathField.setEditable(false);
-
         serverSettingsLabel.setBounds(0, 0, 200, 26);
         serverStatusLabel.setBounds(0, 5, 220, 24);
         for (int i = 0; i < serverInfoLabel.length; i++) {
