@@ -4,6 +4,8 @@ import com.ambroo.Main;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Toolkit;
+
 import com.ambroo.Panels.ServerStatusPanel;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.PasswordProtectionPanel;
@@ -30,6 +32,7 @@ public class MainWindow extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/icons/local-ftp-server-icon.png")));
         windowContainer.setBackground(BACKGROUND_COLOR);
         windowContainer.setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         verticalSeparator.setBackground(new Color(100, 100, 100));
