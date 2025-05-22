@@ -15,7 +15,7 @@ import com.ambroo.Fonts;
 public class FilesListPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
     private static final int PANEL_WIDTH = 520;
-    private static final int PANEL_HEIGHT = 250;
+    private static final int PANEL_HEIGHT = 300;
 
     private JLabel filesListLabel = new JLabel("Files list");
 

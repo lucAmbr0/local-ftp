@@ -1,5 +1,6 @@
 package com.ambroo.Windows;
 
+import com.ambroo.Main;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -7,6 +8,7 @@ import com.ambroo.Panels.ServerStatusPanel;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.PasswordProtectionPanel;
 import com.ambroo.Panels.FilesListPanel;
+import com.ambroo.Panels.LogPanel;
 
 public class MainWindow extends JFrame {
     private static final int WINDOW_WIDTH = 800;
@@ -20,6 +22,7 @@ public class MainWindow extends JFrame {
     private PasswordProtectionPanel passwordProtectionPanel;
     private JPanel verticalSeparator = new JPanel(null);
     private FilesListPanel filesListPanel;
+    private LogPanel logPanel;
 
     public MainWindow() {
         this.setTitle("Local FTP Server");
@@ -37,20 +40,24 @@ public class MainWindow extends JFrame {
         directorySettingsPanel = new DirectorySettingsPanel();
         passwordProtectionPanel = new PasswordProtectionPanel();
         filesListPanel = new FilesListPanel();
+        logPanel = new LogPanel();
 
         // Set bounds for each panel
         serverStatusPanel.setBounds(PADDING, PADDING, 220, 180);
         directorySettingsPanel.setBounds(PADDING, PADDING + 180 + 20, 220, 110);
         passwordProtectionPanel.setBounds(PADDING, PADDING + 180 + 20 + 110 + 20, 220, 170);
-        filesListPanel.setBounds(2 * PADDING + 220 + 20, PADDING, 520, 250); // Set bounds for filesListPanel
+        filesListPanel.setBounds(3 * PADDING + 220, PADDING, 520, 300);
+        logPanel.setBounds(3 * PADDING + 220, PADDING + 300 + 10, 520, 200);
 
         windowContainer.add(serverStatusPanel);
         windowContainer.add(directorySettingsPanel);
         windowContainer.add(passwordProtectionPanel);
         windowContainer.add(verticalSeparator);
         windowContainer.add(filesListPanel);
+        windowContainer.add(logPanel);
         this.add(windowContainer);
         this.setVisible(true);
+        Main.logger.info("UI loaded.");
     }
 
     public ServerStatusPanel getServerStatusPanel() {

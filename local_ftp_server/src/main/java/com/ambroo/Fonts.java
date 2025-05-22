@@ -21,8 +21,10 @@ public class Fonts {
             inter = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getResourceAsStream("/Inter.ttf"));
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(inter);
+            Main.logger.info("Font loaded");
         } catch (FontFormatException | IOException | NullPointerException e) {
             inter = new Font("SansSerif", Font.PLAIN, 12); // fallback
+            Main.logger.error("Error loading font, using SansSerif as fallback.");
             System.out.println(e);
         }
         // Set custom weights using TextAttribute
