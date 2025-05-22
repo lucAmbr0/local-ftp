@@ -1,10 +1,15 @@
 package com.ambroo.Panels;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.ambroo.Fonts;
-
-import java.awt.*;
 
 public class PasswordProtectionPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);

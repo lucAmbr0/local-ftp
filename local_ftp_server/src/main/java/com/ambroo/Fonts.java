@@ -7,8 +7,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
-import org.w3c.dom.Text;
-
 public class Fonts {
     public static final Font TITLE_FONT;
     public static final Font REGULAR_FONT;
