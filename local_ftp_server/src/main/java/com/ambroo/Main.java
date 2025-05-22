@@ -18,7 +18,7 @@ public class Main {
         setTheme();
         new MainWindow();
     }
-    
+
     private static void setTheme() {
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());

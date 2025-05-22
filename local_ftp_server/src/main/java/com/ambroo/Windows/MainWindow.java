@@ -44,7 +44,7 @@ public class MainWindow extends JFrame {
 
         // Set bounds for each panel
         serverStatusPanel.setBounds(PADDING, PADDING, 220, 180);
-        directorySettingsPanel.setBounds(PADDING, PADDING + 180 + 20, 220, 110);
+        directorySettingsPanel.setBounds(PADDING, PADDING + 180 + 20, 220, 120);
         passwordProtectionPanel.setBounds(PADDING, PADDING + 180 + 20 + 110 + 20, 220, 170);
         filesListPanel.setBounds(3 * PADDING + 220, PADDING, 520, 300);
         logPanel.setBounds(3 * PADDING + 220, PADDING + 300 + 10, 520, 200);
