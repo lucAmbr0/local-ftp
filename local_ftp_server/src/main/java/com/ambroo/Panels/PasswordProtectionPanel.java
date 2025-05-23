@@ -7,8 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.ambroo.Data;
 import com.ambroo.Fonts;
 
 public class PasswordProtectionPanel extends JPanel {
@@ -20,17 +22,25 @@ public class PasswordProtectionPanel extends JPanel {
     private JCheckBox passwordToDownloadCheckbox = new JCheckBox("Required to download files", false);
     private JCheckBox passwordToUploadCheckbox = new JCheckBox("Required to upload files", false);
     private JLabel passwordLabel = new JLabel("Password");
-    private JTextField passwordTextField = new JTextField();
+    private JPasswordField passwordTextField = new JPasswordField();
     private JButton saveSettingsBtn = new JButton("Save");
 
+    private String password = "";
     private boolean requirePasswordToDownload = false;
     private boolean requirePasswordToUpload = false;
-    private String password = "";
 
     public PasswordProtectionPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+
+        password = Data.getPsswd();
+        requirePasswordToDownload = Data.getPsswdToDownload();
+        requirePasswordToUpload = Data.getPsswdToUpload();
+
+        passwordToDownloadCheckbox.setSelected(requirePasswordToDownload);
+        passwordToUploadCheckbox.setSelected(requirePasswordToUpload);
+        passwordTextField.setText(password);
 
         passwordProtectionLabel.setFont(Fonts.SUBTITLE_FONT);
         passwordProtectionLabel.setBounds(0, 0, 220, 26);
@@ -49,28 +59,60 @@ public class PasswordProtectionPanel extends JPanel {
         add(passwordLabel);
         add(passwordTextField);
         add(saveSettingsBtn);
+
+        saveSettingsBtn.addActionListener(e -> {
+            boolean downloadChecked = passwordToDownloadCheckbox.isSelected();
+            boolean uploadChecked = passwordToUploadCheckbox.isSelected();
+            String pwd = passwordTextField.getText();
+            setRequirePasswordToDownload(downloadChecked);
+            setRequirePasswordToUpload(uploadChecked);
+            setPassword(pwd);
+            Data.setPsswdToDownload(downloadChecked);
+            Data.setPsswdToUpload(uploadChecked);
+            Data.setPsswd(pwd);
+        });
     }
 
     public void setRequirePasswordToDownload(boolean require) {
         this.requirePasswordToDownload = require;
         passwordToDownloadCheckbox.setSelected(require);
     }
-    public boolean isRequirePasswordToDownload() { return requirePasswordToDownload; }
+
+    public boolean isRequirePasswordToDownload() {
+        return requirePasswordToDownload;
+    }
 
     public void setRequirePasswordToUpload(boolean require) {
         this.requirePasswordToUpload = require;
         passwordToUploadCheckbox.setSelected(require);
     }
-    public boolean isRequirePasswordToUpload() { return requirePasswordToUpload; }
+
+    public boolean isRequirePasswordToUpload() {
+        return requirePasswordToUpload;
+    }
 
     public void setPassword(String password) {
         this.password = password;
         passwordTextField.setText(password);
     }
-    public String getPassword() { return password; }
 
-    public JButton getSaveSettingsButton() { return saveSettingsBtn; }
-    public JCheckBox getPasswordToDownloadCheckbox() { return passwordToDownloadCheckbox; }
-    public JCheckBox getPasswordToUploadCheckbox() { return passwordToUploadCheckbox; }
-    public JTextField getPasswordTextField() { return passwordTextField; }
+    public String getPassword() {
+        return password;
+    }
+
+    public JButton getSaveSettingsButton() {
+        return saveSettingsBtn;
+    }
+
+    public JCheckBox getPasswordToDownloadCheckbox() {
+        return passwordToDownloadCheckbox;
+    }
+
+    public JCheckBox getPasswordToUploadCheckbox() {
+        return passwordToUploadCheckbox;
+    }
+
+    public JTextField getPasswordTextField() {
+        return passwordTextField;
+    }
 }
