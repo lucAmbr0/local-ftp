@@ -1,7 +1,6 @@
 package com.ambroo.Panels;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,8 +13,6 @@ import com.ambroo.Fonts;
 
 public class FilesListPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
-    private static final int PANEL_WIDTH = 520;
-    private static final int PANEL_HEIGHT = 300;
 
     private JLabel filesListLabel = new JLabel("Files list");
 
@@ -38,18 +35,23 @@ public class FilesListPanel extends JPanel {
     public FilesListPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
         filesListLabel.setFont(Fonts.SUBTITLE_FONT);
         filesListLabel.setBounds(0, 0, 250, 26);
 
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        scrollPane.setBounds(0, 31, PANEL_WIDTH - 30, PANEL_HEIGHT - 41);
 
         add(filesListLabel);
         add(scrollPane);
     }
 
+    public void updateInnerBounds(int width, int height) {
+        scrollPane.setBounds(0, 31, width - 10, height - 41);
+        table.setPreferredScrollableViewportSize(scrollPane.getSize());
+        table.setSize(scrollPane.getSize());
+        table.revalidate();
+        table.repaint();
+    }
+
 }
- 

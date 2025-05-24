@@ -2,6 +2,8 @@ package com.ambroo.Panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -13,8 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.ambroo.Fonts;
+import com.ambroo.Main;
 
-public class ServerStatusPanel extends JPanel {
+public class ServerStatusPanel extends JPanel implements ActionListener {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
     private static final Color BACKGROUND_COLOR_LIGHT = new Color(230, 230, 230);
     private static final int PANEL_WIDTH = 220;
@@ -24,7 +27,7 @@ public class ServerStatusPanel extends JPanel {
     private int serverPort = 0;
     private String uptime = "00:00:00";
     private boolean serverOnline = false;
-    
+
     private JPanel serverInfoContainer = new JPanel(null);
     private JLabel serverSettingsLabel = new JLabel("Server Settings");
     private JLabel serverStatusLabel = new JLabel("Status:", SwingConstants.CENTER);
@@ -56,8 +59,12 @@ public class ServerStatusPanel extends JPanel {
         uptimeLabel.setFont(Fonts.INFO_FONT);
         uptimeLabel.setBounds(10, 77, 220, 18);
         startServerBtn.setBounds(0, 145, 105, 30);
+        startServerBtn.setName("Start");
+        startServerBtn.addActionListener(this);
         stopServerBtn.setBounds(115, 145, 105, 30);
         stopServerBtn.setEnabled(false);
+        stopServerBtn.setName("Stop");
+        stopServerBtn.addActionListener(this);
 
         add(serverSettingsLabel);
         add(serverInfoContainer);
@@ -90,6 +97,17 @@ public class ServerStatusPanel extends JPanel {
         return "0.0.0.0";
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton btn = (JButton) e.getSource();
+        if ("Start".equals(btn.getName())) {
+            setServerOnline(true);
+        } else if ("Stop".equals(btn.getName())) {
+            setServerOnline(false);
+        }
+    }
+
+
     public void setServerIp(String ip) {
         this.serverIp = ip;
         serverIpLabel.setText("Server IP: " + ip);
@@ -120,7 +138,8 @@ public class ServerStatusPanel extends JPanel {
     public void setServerOnline(boolean online) {
         this.serverOnline = online;
         serverStatusLabel.setText(online ? "Status: Online" : "Status: Offline");
-        serverStatusLabel.setBackground(online ? new Color(0, 255, 0) : new Color(255, 90, 95));
+        serverStatusLabel.setBackground(online ? new Color(90, 255, 95) : new Color(255, 90, 95));
+        Main.logger.info(online ? "Starting server" : "Closing server");
         startServerBtn.setEnabled(!online);
         stopServerBtn.setEnabled(online);
     }

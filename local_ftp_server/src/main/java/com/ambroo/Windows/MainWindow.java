@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import com.ambroo.Panels.ServerStatusPanel;
 import com.ambroo.Panels.DirectorySettingsPanel;
@@ -28,15 +30,16 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         this.setTitle("Local FTP Server");
-        this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        this.setResizable(false);
+        this.setMinimumSize(new java.awt.Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/icons/local-ftp-server-icon.png")));
+        this.setIconImage(
+                Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/icons/local-ftp-server-icon.png")));
         windowContainer.setBackground(BACKGROUND_COLOR);
         windowContainer.setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         verticalSeparator.setBackground(new Color(100, 100, 100));
-        verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, 500);
+        verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
 
         // Initialize panels
         serverStatusPanel = new ServerStatusPanel();
@@ -49,9 +52,9 @@ public class MainWindow extends JFrame {
         serverStatusPanel.setBounds(PADDING, PADDING, 220, 180);
         directorySettingsPanel.setBounds(PADDING, PADDING + 180 + 20, 220, 120);
         passwordProtectionPanel.setBounds(PADDING, PADDING + 180 + 20 + 110 + 20, 220, 170);
-        filesListPanel.setBounds(3 * PADDING + 220, PADDING, 520, 300);
-        logPanel.setBounds(3 * PADDING + 220, PADDING + 300 + 10, 520, 200);
+        verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
 
+        // Add panels
         windowContainer.add(serverStatusPanel);
         windowContainer.add(directorySettingsPanel);
         windowContainer.add(passwordProtectionPanel);
@@ -60,7 +63,31 @@ public class MainWindow extends JFrame {
         windowContainer.add(logPanel);
         this.add(windowContainer);
         this.setVisible(true);
-        Main.logger.info("UI loaded.");
+        Main.logger.info("UI loaded");
+
+        // Responsive layout for right panels
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                updateRightPanelsLayout();
+            }
+        });
+        updateRightPanelsLayout();
+    }
+
+    private void updateRightPanelsLayout() {
+        int width = this.getContentPane().getWidth();
+        int height = this.getContentPane().getHeight();
+        int rightX = 3 * PADDING + 220;
+        int rightWidth = width - rightX - PADDING;
+        int rightHeight = height - 2 * PADDING;
+        int filesListHeight = (int) (rightHeight * 2.0 / 3.0) - 5;
+        int logPanelHeight = rightHeight - filesListHeight - 10;
+        filesListPanel.setBounds(rightX, PADDING, rightWidth, filesListHeight);
+        logPanel.setBounds(rightX, PADDING + filesListHeight + 10, rightWidth, logPanelHeight);
+        filesListPanel.updateInnerBounds(rightWidth, filesListHeight);
+        logPanel.updateInnerBounds(rightWidth, logPanelHeight);
+        verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, height - 2 * PADDING);
     }
 
     public ServerStatusPanel getServerStatusPanel() {
