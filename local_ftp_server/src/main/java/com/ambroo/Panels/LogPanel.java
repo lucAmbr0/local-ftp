@@ -20,8 +20,6 @@ public class LogPanel extends JPanel {
     public LogPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
-
-
         serverLogLabel.setFont(Fonts.SUBTITLE_FONT);
         serverLogLabel.setBounds(0, 0, 250, 26);
         logArea.setEditable(false);

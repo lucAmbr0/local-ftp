@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
         windowContainer.setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         verticalSeparator.setBackground(new Color(100, 100, 100));
         verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
-
+        
         // Initialize panels
         serverStatusPanel = new ServerStatusPanel();
         directorySettingsPanel = new DirectorySettingsPanel();

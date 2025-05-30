@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.ambroo.Data;
 import com.ambroo.Fonts;
+import com.ambroo.Server.Server;
 
 public class PasswordProtectionPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
@@ -25,22 +25,14 @@ public class PasswordProtectionPanel extends JPanel {
     private JPasswordField passwordTextField = new JPasswordField();
     private JButton saveSettingsBtn = new JButton("Save");
 
-    private String password = "";
-    private boolean requirePasswordToDownload = false;
-    private boolean requirePasswordToUpload = false;
-
     public PasswordProtectionPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
-        password = Data.getPsswd();
-        requirePasswordToDownload = Data.getPsswdToDownload();
-        requirePasswordToUpload = Data.getPsswdToUpload();
-
-        passwordToDownloadCheckbox.setSelected(requirePasswordToDownload);
-        passwordToUploadCheckbox.setSelected(requirePasswordToUpload);
-        passwordTextField.setText(password);
+        passwordToDownloadCheckbox.setSelected(Server.isPswdToDownload());
+        passwordToUploadCheckbox.setSelected(Server.isPswdToUpload());
+        passwordTextField.setText(Server.getPassword());
 
         passwordProtectionLabel.setFont(Fonts.SUBTITLE_FONT);
         passwordProtectionLabel.setBounds(0, 0, 220, 26);
@@ -64,40 +56,34 @@ public class PasswordProtectionPanel extends JPanel {
             boolean downloadChecked = passwordToDownloadCheckbox.isSelected();
             boolean uploadChecked = passwordToUploadCheckbox.isSelected();
             String pwd = passwordTextField.getText();
-            setRequirePasswordToDownload(downloadChecked);
-            setRequirePasswordToUpload(uploadChecked);
-            setPassword(pwd);
-            Data.setPsswdToDownload(downloadChecked);
-            Data.setPsswdToUpload(uploadChecked);
-            Data.setPsswd(pwd);
+            Server.setPswdToDownload(downloadChecked);
+            Server.setPswdToUpload(uploadChecked);
+            Server.setPassword(pwd);
         });
     }
 
     public void setRequirePasswordToDownload(boolean require) {
-        this.requirePasswordToDownload = require;
         passwordToDownloadCheckbox.setSelected(require);
     }
 
     public boolean isRequirePasswordToDownload() {
-        return requirePasswordToDownload;
+        return passwordToDownloadCheckbox.isSelected();
     }
 
     public void setRequirePasswordToUpload(boolean require) {
-        this.requirePasswordToUpload = require;
         passwordToUploadCheckbox.setSelected(require);
     }
 
     public boolean isRequirePasswordToUpload() {
-        return requirePasswordToUpload;
+        return passwordToUploadCheckbox.isSelected();
     }
 
     public void setPassword(String password) {
-        this.password = password;
         passwordTextField.setText(password);
     }
 
     public String getPassword() {
-        return password;
+        return new String(passwordTextField.getPassword());
     }
 
     public JButton getSaveSettingsButton() {

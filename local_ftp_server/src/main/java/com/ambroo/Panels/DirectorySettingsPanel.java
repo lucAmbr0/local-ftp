@@ -1,11 +1,9 @@
 package com.ambroo.Panels;
 
 import javax.swing.*;
-
-import com.ambroo.Data;
 import com.ambroo.Fonts;
 import com.ambroo.Main;
-
+import com.ambroo.Server.Server;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,8 +21,6 @@ public class DirectorySettingsPanel extends JPanel implements ActionListener {
     private JButton openFolderBtn = new JButton("Open folder");
     private JButton selectFolderBtn = new JButton("Select folder");
     private JFileChooser folderChooser;
-
-    private String directoryPath;
 
     public DirectorySettingsPanel() {
         setLayout(null);
@@ -45,15 +41,7 @@ public class DirectorySettingsPanel extends JPanel implements ActionListener {
         selectFolderBtn.setName("Select folder");
         selectFolderBtn.addActionListener(this);
 
-        directoryPath = Data.getServerPath();
-        pathField.setText(directoryPath);
-
-        Data.addPropertyChangeListener(evt -> {
-            if ("serverPath".equals(evt.getPropertyName())) {
-                directoryPath = (String) evt.getNewValue();
-                pathField.setText(directoryPath);
-            }
-        });
+        pathField.setText(Server.getServerPath());
 
         add(sharedFilesDirectoryLabel);
         add(pathToDirectoryLabel);
@@ -67,17 +55,17 @@ public class DirectorySettingsPanel extends JPanel implements ActionListener {
         JButton btn = (JButton) e.getSource();
         if ("Open folder".equals(btn.getName())) {
             try {
-                File folder = new File(directoryPath);
+                File folder = new File(Server.getServerPath());
                 if (Desktop.isDesktopSupported() && folder.exists() && folder.isDirectory()) {
                     Desktop.getDesktop().open(folder);
-                    System.out.println("Opened folder: " + folder.getAbsolutePath());
+                    Main.logger.error("Opened folder: " + folder.getAbsolutePath());
                 } else {
-                    System.err.println(
+                    Main.logger.error(
                             "Could not open folder. Either Desktop is not supported, or the folder does not exist/is not a directory: "
-                                    + directoryPath);
+                                    + Server.getServerPath());
                 }
             } catch (IOException a) {
-                System.err.println("An error occurred while trying to open the folder: " + a.getMessage());
+                Main.logger.error("An error occurred while trying to open the folder: " + a.getMessage());
                 a.printStackTrace();
             }
             return;
@@ -91,8 +79,7 @@ public class DirectorySettingsPanel extends JPanel implements ActionListener {
                 String selectedPath = folderChooser.getSelectedFile().toString();
                 Main.logger.info("Changed server directory to " + selectedPath);
                 setDirectoryPath(selectedPath);
-                Data.setServerPath(selectedPath);
-                Data.saveConfig();
+                Server.setServerPath(selectedPath);
             } else {
                 Main.logger.info("No Selection ");
             }
@@ -101,12 +88,11 @@ public class DirectorySettingsPanel extends JPanel implements ActionListener {
     }
 
     public void setDirectoryPath(String path) {
-        this.directoryPath = path;
         pathField.setText(path);
     }
 
     public String getDirectoryPath() {
-        return directoryPath;
+        return Server.getServerPath();
     }
 
     public JButton getOpenFolderButton() {

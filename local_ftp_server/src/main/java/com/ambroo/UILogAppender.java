@@ -10,7 +10,7 @@ public class UILogAppender extends AppenderBase<ILoggingEvent> {
     public static LogListener listener;
     private static final List<String> buffer = new ArrayList<>();
 
-    @Override
+    @Override 
     protected void append(ILoggingEvent event) {
         if (listener != null) {
             listener.onLog(event.getFormattedMessage());
