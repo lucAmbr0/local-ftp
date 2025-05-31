@@ -17,7 +17,9 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Main class launched");
         setTheme();
-        new MainWindow();
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            new MainWindow();
+        });
     }
 
     private static void setTheme() {

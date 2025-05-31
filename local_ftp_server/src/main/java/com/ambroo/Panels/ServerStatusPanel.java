@@ -26,6 +26,8 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
     private JLabel uptimeLabel = new JLabel("Uptime: 00:00:00");
     private JButton startServerBtn = new JButton("Start");
     private JButton stopServerBtn = new JButton("Stop");
+    private long serverStartTime = 0;
+    private javax.swing.Timer uptimeTimer;
 
     public ServerStatusPanel() {
         setLayout(null);
@@ -62,18 +64,38 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
         serverInfoContainer.add(uptimeLabel);
         add(startServerBtn);
         add(stopServerBtn);
+        uptimeTimer = new javax.swing.Timer(1000, e -> updateUptime());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         if ("Start".equals(btn.getName())) {
-            Server.setActive(true);
-            setServerOnline(true);
+            setServerStarting();
+            new Thread(() -> {
+                try {
+                    Server.startServer();
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        setServerOnline(true);
+                    });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        setServerOnline(false);
+                    });
+                }
+            }).start();
         } else if ("Stop".equals(btn.getName())) {
-            Server.setActive(false);
+            Server.stopServer();
             setServerOnline(false);
         }
+    }
+
+    private void setServerStarting() {
+        serverStatusLabel.setText("Status: Starting");
+        serverStatusLabel.setBackground(new Color(204, 119, 34));
+        startServerBtn.setEnabled(false);
+        stopServerBtn.setEnabled(false);
     }
 
     public void setServerIp(String serverIp) {
@@ -95,9 +117,26 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
     public void setServerOnline(boolean online) {
         serverStatusLabel.setText(online ? "Status: Online" : "Status: Offline");
         serverStatusLabel.setBackground(online ? new Color(90, 255, 95) : new Color(255, 90, 95));
-        Main.logger.info(online ? "Starting server" : "Closing server");
+        Main.logger.info(online ? "Server started" : "Server closed");
         startServerBtn.setEnabled(!online);
         stopServerBtn.setEnabled(online);
+        if (online) {
+            serverStartTime = System.currentTimeMillis();
+            uptimeLabel.setText("Uptime: 00:00:00");
+            uptimeTimer.start();
+        } else {
+            uptimeTimer.stop();
+            uptimeLabel.setText("Uptime: 00:00:00");
+        }
+    }
+
+    private void updateUptime() {
+        long elapsed = (System.currentTimeMillis() - serverStartTime) / 1000;
+        long hours = elapsed / 3600;
+        long minutes = (elapsed % 3600) / 60;
+        long seconds = elapsed % 60;
+        String formatted = String.format("Uptime: %02d:%02d:%02d", hours, minutes, seconds);
+        uptimeLabel.setText(formatted);
     }
 
     public boolean isServerOnline() {

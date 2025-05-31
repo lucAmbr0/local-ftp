@@ -12,10 +12,12 @@ public class UILogAppender extends AppenderBase<ILoggingEvent> {
 
     @Override 
     protected void append(ILoggingEvent event) {
-        if (listener != null) {
-            listener.onLog(event.getFormattedMessage());
-        } else {
-            buffer.add(event.getFormattedMessage());
+        if (event.getLevel().isGreaterOrEqual(ch.qos.logback.classic.Level.INFO)) {
+            if (listener != null) {
+                listener.onLog(event.getFormattedMessage());
+            } else {
+                buffer.add(event.getFormattedMessage());
+            }
         }
     }
 

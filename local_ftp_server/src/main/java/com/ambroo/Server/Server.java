@@ -28,7 +28,17 @@ public class Server {
     }
 
     public Server() {
-        setPort(5501);
+    }
+
+    public static synchronized void startServer() throws Exception {
+        if (app != null) {
+            try {
+                app.start(port);
+                return;
+            } catch (io.javalin.util.JavalinException ex) {
+                app = null;
+            }
+        }
         app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> {
                 cors.addRule(it -> it.anyHost());
@@ -36,9 +46,23 @@ public class Server {
         });
         registerRoutes();
         app.start(port);
+        setActive(true);
     }
 
-    private void registerRoutes() {
+    public static synchronized void stopServer() {
+        if (app != null) {
+            try {
+                app.stop();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            app = null;
+        }
+        setActive(false);
+    }
+
+    public static void registerRoutes() {
+        if (app == null) return;
         app.post("/test", ctx -> {
             String question = ctx.body();
             ctx.result("Received " + question);
