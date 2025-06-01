@@ -2,7 +2,13 @@ package com.ambroo;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UILogAppender extends AppenderBase<ILoggingEvent> {
@@ -20,21 +26,21 @@ public class UILogAppender extends AppenderBase<ILoggingEvent> {
             }
         }
 
-        java.io.File logsDir = new java.io.File("Logs");
+        File logsDir = new File("Logs");
         if (!logsDir.exists()) {
             logsDir.mkdirs();
         }
 
-        java.util.Date now = new java.util.Date();
-        java.text.SimpleDateFormat dateFormatForFile = new java.text.SimpleDateFormat("dd-MM-yyyy");
+        Date now = new java.util.Date();
+        SimpleDateFormat dateFormatForFile = new SimpleDateFormat("dd-MM-yyyy");
         String dateString = dateFormatForFile.format(now);
-        java.text.SimpleDateFormat dateTimeFormat = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String dateTimeString = dateTimeFormat.format(now);
 
         int logNumber = 1;
-        java.io.File logFile;
+        File logFile;
         while (true) {
-            logFile = new java.io.File(logsDir, String.format("log_%s_%d.txt", dateString, logNumber));
+            logFile = new File(logsDir, String.format("log_%s_%d.txt", dateString, logNumber));
             if (!logFile.exists() || logFile.length() <= 2048 * 1024) {
                 break;
             }
@@ -48,9 +54,9 @@ public class UILogAppender extends AppenderBase<ILoggingEvent> {
             event.getFormattedMessage()
         );
 
-        try (java.io.FileWriter fw = new java.io.FileWriter(logFile, true)) {
+        try (FileWriter fw = new FileWriter(logFile, true)) {
             fw.write(logLine + System.lineSeparator());
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             System.err.println("Failed to write log: " + e.getMessage());
         }
     }
