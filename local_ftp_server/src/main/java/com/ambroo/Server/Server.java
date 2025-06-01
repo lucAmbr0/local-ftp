@@ -3,6 +3,8 @@ package com.ambroo.Server;
 import io.javalin.Javalin;
 import org.json.JSONObject;
 
+import com.ambroo.Main;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -65,6 +67,7 @@ public class Server {
         if (app == null) return;
         app.post("/test", ctx -> {
             String question = ctx.body();
+            Main.logger.info("Request received from endpoint " + getSocket() + "test ==> " + question);
             ctx.result("Received " + question);
         });
     }
@@ -133,6 +136,10 @@ public class Server {
             e.printStackTrace();
         }
         return "0.0.0.0";
+    }
+
+    public static String getSocket() {
+        return "http://" + getIp() + ":" + getPort() + "/";
     }
 
     public static boolean isActive() { return active; }
