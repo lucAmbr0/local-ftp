@@ -11,7 +11,7 @@ import java.awt.event.ComponentEvent;
 import com.ambroo.Panels.ServerStatusPanel;
 import com.ambroo.Server.Server;
 import com.ambroo.Panels.DirectorySettingsPanel;
-import com.ambroo.Panels.PasswordProtectionPanel;
+import com.ambroo.Panels.LoginPreferencesPanel;
 import com.ambroo.Panels.FilesListPanel;
 import com.ambroo.Panels.LogPanel;
 
@@ -24,7 +24,7 @@ public class MainWindow extends JFrame {
     private JPanel windowContainer = new JPanel(null);
     private ServerStatusPanel serverStatusPanel;
     private DirectorySettingsPanel directorySettingsPanel;
-    private PasswordProtectionPanel passwordProtectionPanel;
+    private LoginPreferencesPanel passwordProtectionPanel;
     private JPanel verticalSeparator = new JPanel(null);
     private FilesListPanel filesListPanel;
     private LogPanel logPanel;
@@ -45,7 +45,7 @@ public class MainWindow extends JFrame {
         // Initialize panels
         serverStatusPanel = new ServerStatusPanel();
         directorySettingsPanel = new DirectorySettingsPanel();
-        passwordProtectionPanel = new PasswordProtectionPanel();
+        passwordProtectionPanel = new LoginPreferencesPanel();
         filesListPanel = new FilesListPanel();
         logPanel = new LogPanel();
 
@@ -103,7 +103,7 @@ public class MainWindow extends JFrame {
         return directorySettingsPanel;
     }
 
-    public PasswordProtectionPanel getPasswordProtectionPanel() {
+    public LoginPreferencesPanel getPasswordProtectionPanel() {
         return passwordProtectionPanel;
     }
 }

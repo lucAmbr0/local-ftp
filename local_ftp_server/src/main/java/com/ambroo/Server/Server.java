@@ -24,8 +24,8 @@ public class Server {
     private static int filesAmount;
     private static String serverPath;
     private static String password;
-    private static boolean pswdToDownload;
-    private static boolean pswdToUpload;
+    private static boolean requireNickname;
+    private static boolean requirePassword;
 
     static {
         loadConfig();
@@ -68,8 +68,8 @@ public class Server {
             if (!Files.exists(configPath)) {
                 serverPath = "";
                 password = "";
-                pswdToDownload = false;
-                pswdToUpload = false;
+                requireNickname = false;
+                requirePassword = false;
                 autostart = false;
                 port = 5501;
                 filesAmount = 0;
@@ -80,8 +80,8 @@ public class Server {
             JSONObject obj = new JSONObject(json);
             serverPath = obj.optString("serverPath", "");
             password = obj.optString("psswd", "");
-            pswdToDownload = obj.optBoolean("psswd_to_download", false);
-            pswdToUpload = obj.optBoolean("psswd_to_upload", false);
+            requireNickname = obj.optBoolean("requireNickname", false);
+            requirePassword = obj.optBoolean("requirePassword", false);
             autostart = obj.optBoolean("autostart", false);
             port = obj.optInt("port", 5501);
             filesAmount = obj.optInt("filesAmount", 0);
@@ -96,8 +96,8 @@ public class Server {
             JSONObject obj = new JSONObject();
             obj.put("serverPath", getServerPath());
             obj.put("psswd", getPassword());
-            obj.put("psswd_to_download", isPswdToDownload());
-            obj.put("psswd_to_upload", isPswdToUpload());
+            obj.put("requireNickname", isRequireNickname());
+            obj.put("requirePassword", isRequirePassword());
             obj.put("autostart", isAutostart());
             obj.put("port", getPort());
             obj.put("filesAmount", getFilesAmount());
@@ -215,21 +215,21 @@ public class Server {
         saveConfig();
     }
 
-    public static boolean isPswdToDownload() {
-        return pswdToDownload;
+    public static boolean isRequireNickname() {
+        return requireNickname;
     }
 
-    public static void setPswdToDownload(boolean value) {
-        pswdToDownload = value;
+    public static void setRequireNickname(boolean value) {
+        requireNickname = value;
         saveConfig();
     }
 
-    public static boolean isPswdToUpload() {
-        return pswdToUpload;
+    public static boolean isRequirePassword() {
+        return requirePassword;
     }
 
-    public static void setPswdToUpload(boolean value) {
-        pswdToUpload = value;
+    public static void setRequirePassword(boolean value) {
+        requirePassword = value;
         saveConfig();
     }
 }

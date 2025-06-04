@@ -13,69 +13,76 @@ import javax.swing.JTextField;
 import com.ambroo.Fonts;
 import com.ambroo.Server.Server;
 
-public class PasswordProtectionPanel extends JPanel {
+public class LoginPreferencesPanel extends JPanel {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
     private static final int PANEL_WIDTH = 220;
     private static final int PANEL_HEIGHT = 170;
 
     private JLabel passwordProtectionLabel = new JLabel("Password protection");
-    private JCheckBox passwordToDownloadCheckbox = new JCheckBox("Required to download files", false);
-    private JCheckBox passwordToUploadCheckbox = new JCheckBox("Required to upload files", false);
+    private JCheckBox requireNickname = new JCheckBox("Require nickname", false);
+    private JCheckBox requirePassword = new JCheckBox("Require password", false);
     private JLabel passwordLabel = new JLabel("Password");
     private JPasswordField passwordTextField = new JPasswordField();
     private JButton saveSettingsBtn = new JButton("Save");
 
-    public PasswordProtectionPanel() {
+    public LoginPreferencesPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
-        passwordToDownloadCheckbox.setSelected(Server.isPswdToDownload());
-        passwordToUploadCheckbox.setSelected(Server.isPswdToUpload());
+        requireNickname.setSelected(Server.isRequireNickname());
+        requirePassword.setSelected(Server.isRequirePassword());
         passwordTextField.setText(Server.getPassword());
 
         passwordProtectionLabel.setFont(Fonts.SUBTITLE_FONT);
         passwordProtectionLabel.setBounds(0, 0, 220, 26);
-        passwordToDownloadCheckbox.setFont(Fonts.REGULAR_FONT);
-        passwordToDownloadCheckbox.setBounds(0, 26, 220, 26);
-        passwordToUploadCheckbox.setFont(Fonts.REGULAR_FONT);
-        passwordToUploadCheckbox.setBounds(0, 52, 220, 26);
+        requireNickname.setFont(Fonts.REGULAR_FONT);
+        requireNickname.setBounds(0, 26, 220, 26);
+        requirePassword.setFont(Fonts.REGULAR_FONT);
+        requirePassword.setBounds(0, 52, 220, 26);
         passwordLabel.setFont(Fonts.REGULAR_FONT);
         passwordLabel.setBounds(0, 78, 220, 26);
         passwordTextField.setBounds(0, 104, 220, 26);
         saveSettingsBtn.setBounds(140, 140, 80, 30);
 
         add(passwordProtectionLabel);
-        add(passwordToDownloadCheckbox);
-        add(passwordToUploadCheckbox);
+        add(requireNickname);
+        add(requirePassword);
         add(passwordLabel);
         add(passwordTextField);
         add(saveSettingsBtn);
 
+        requireNickname.addActionListener(e -> {
+            boolean requireNicknameChecked = requireNickname.isSelected();
+            Server.setRequireNickname(requireNicknameChecked);
+        });
+        
+        requirePassword.addActionListener(e -> {
+            boolean requirePasswordChecked = requirePassword.isSelected();
+            passwordTextField.setEnabled(requirePasswordChecked);
+            Server.setRequirePassword(requirePasswordChecked);
+        });
+
         saveSettingsBtn.addActionListener(e -> {
-            boolean downloadChecked = passwordToDownloadCheckbox.isSelected();
-            boolean uploadChecked = passwordToUploadCheckbox.isSelected();
             String pwd = passwordTextField.getText();
-            Server.setPswdToDownload(downloadChecked);
-            Server.setPswdToUpload(uploadChecked);
             Server.setPassword(pwd);
         });
     }
 
     public void setRequirePasswordToDownload(boolean require) {
-        passwordToDownloadCheckbox.setSelected(require);
+        requireNickname.setSelected(require);
     }
 
     public boolean isRequirePasswordToDownload() {
-        return passwordToDownloadCheckbox.isSelected();
+        return requireNickname.isSelected();
     }
 
     public void setRequirePasswordToUpload(boolean require) {
-        passwordToUploadCheckbox.setSelected(require);
+        requirePassword.setSelected(require);
     }
 
     public boolean isRequirePasswordToUpload() {
-        return passwordToUploadCheckbox.isSelected();
+        return requirePassword.isSelected();
     }
 
     public void setPassword(String password) {
@@ -90,12 +97,12 @@ public class PasswordProtectionPanel extends JPanel {
         return saveSettingsBtn;
     }
 
-    public JCheckBox getPasswordToDownloadCheckbox() {
-        return passwordToDownloadCheckbox;
+    public JCheckBox getRequireNickname() {
+        return requireNickname;
     }
 
-    public JCheckBox getPasswordToUploadCheckbox() {
-        return passwordToUploadCheckbox;
+    public JCheckBox getRequirePassword() {
+        return requirePassword;
     }
 
     public JTextField getPasswordTextField() {

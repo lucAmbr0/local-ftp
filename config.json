@@ -1,9 +1,9 @@
 {
     "serverPath": "D:\\lucaa\\Music\\MediaHuman (dest.)\\Albums\\Hurry Up Tomorrow",
+    "requirePassword": true,
     "port": 5501,
-    "psswd_to_upload": false,
     "autostart": false,
-    "psswd": "bobbo",
-    "psswd_to_download": false,
+    "psswd": "gaklgjadklgadk",
+    "requireNickname": true,
     "filesAmount": 0
 }
