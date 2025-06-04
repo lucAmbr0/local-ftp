@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import com.ambroo.Panels.ServerStatusPanel;
+import com.ambroo.Server.Server;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.PasswordProtectionPanel;
 import com.ambroo.Panels.FilesListPanel;
@@ -49,9 +50,9 @@ public class MainWindow extends JFrame {
         logPanel = new LogPanel();
 
         // Set bounds for each panel
-        serverStatusPanel.setBounds(PADDING, PADDING, 220, 180);
-        directorySettingsPanel.setBounds(PADDING, PADDING + 180 + 20, 220, 120);
-        passwordProtectionPanel.setBounds(PADDING, PADDING + 180 + 20 + 110 + 20, 220, 170);
+        serverStatusPanel.setBounds(PADDING, PADDING, 220, 210);
+        directorySettingsPanel.setBounds(PADDING, PADDING + 210 + 20, 220, 120);
+        passwordProtectionPanel.setBounds(PADDING, PADDING + 210 + 20 + 110 + 20, 220, 170);
         verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
 
         // Add panels
@@ -64,6 +65,10 @@ public class MainWindow extends JFrame {
         this.add(windowContainer);
         this.setVisible(true);
         Main.logger.info("UI loaded");
+
+        if (Server.isAutostart()) {
+            
+        }
 
         // Responsive layout for right panels
         this.addComponentListener(new ComponentAdapter() {

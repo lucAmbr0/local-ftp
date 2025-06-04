@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -16,23 +17,25 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
     private static final Color BACKGROUND_COLOR_LIGHT = new Color(230, 230, 230);
     private static final int PANEL_WIDTH = 220;
-    private static final int PANEL_HEIGHT = 180;
+    private static final int PANEL_HEIGHT = 210;
 
     private JPanel serverInfoContainer = new JPanel(null);
     private JLabel serverSettingsLabel = new JLabel("Server Settings");
-    private JLabel serverStatusLabel = new JLabel("Status: Offline",SwingConstants.CENTER);
+    public static JLabel serverStatusLabel = new JLabel("Status: Offline",SwingConstants.CENTER);
     private JLabel serverIpLabel = new JLabel("Server IP: ");
     private JLabel serverPortLabel = new JLabel("Server Port: ");
-    private JLabel uptimeLabel = new JLabel("Uptime: 00:00:00");
-    private JButton startServerBtn = new JButton("Start");
-    private JButton stopServerBtn = new JButton("Stop");
-    private long serverStartTime = 0;
-    private javax.swing.Timer uptimeTimer;
+    private static JLabel uptimeLabel = new JLabel("Uptime: 00:00:00");
+    public static JButton startServerBtn = new JButton("Start");
+    public static JButton stopServerBtn = new JButton("Stop");
+    private JCheckBox autostartCheckbox = new JCheckBox("Auto-start at launch", false);
+    private static long serverStartTime = 0;
+    private static javax.swing.Timer uptimeTimer;
 
     public ServerStatusPanel() {
         setLayout(null);
         setBackground(BACKGROUND_COLOR);
         setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        autostartCheckbox.setSelected(Server.isAutostart());
         serverStatusLabel.setBackground(new Color(255,90,95));
         serverSettingsLabel.setFont(Fonts.TITLE_FONT);
         serverSettingsLabel.setBounds(0, 0, 200, 26);
@@ -56,6 +59,7 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
         stopServerBtn.setEnabled(false);
         stopServerBtn.setName("Stop");
         stopServerBtn.addActionListener(this);
+        autostartCheckbox.setBounds(0, 180, 200, 26);
         add(serverSettingsLabel);
         add(serverInfoContainer);
         serverInfoContainer.add(serverStatusLabel);
@@ -64,38 +68,23 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
         serverInfoContainer.add(uptimeLabel);
         add(startServerBtn);
         add(stopServerBtn);
+        add(autostartCheckbox);
         uptimeTimer = new javax.swing.Timer(1000, e -> updateUptime());
+
+        autostartCheckbox.addActionListener(e -> {
+            boolean autostartChecked = autostartCheckbox.isSelected();
+            Server.setAutostart(autostartChecked);
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton btn = (JButton) e.getSource();
         if ("Start".equals(btn.getName())) {
-            setServerStarting();
-            new Thread(() -> {
-                try {
-                    Server.startServer();
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        setServerOnline(true);
-                    });
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        setServerOnline(false);
-                    });
-                }
-            }).start();
+           Server.start();
         } else if ("Stop".equals(btn.getName())) {
-            Server.stopServer();
-            setServerOnline(false);
+            Server.stop();
         }
-    }
-
-    private void setServerStarting() {
-        serverStatusLabel.setText("Status: Starting");
-        serverStatusLabel.setBackground(new Color(204, 119, 34));
-        startServerBtn.setEnabled(false);
-        stopServerBtn.setEnabled(false);
     }
 
     public void setServerIp(String serverIp) {
@@ -114,7 +103,7 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
         return Server.getPort();
     }
 
-    public void setServerOnline(boolean online) {
+    public static void setServerOnline(boolean online) {
         serverStatusLabel.setText(online ? "Status: Online" : "Status: Offline");
         serverStatusLabel.setBackground(online ? new Color(90, 255, 95) : new Color(255, 90, 95));
         Main.logger.info(online ? "Server started" : "Server closed");
@@ -140,7 +129,7 @@ public class ServerStatusPanel extends JPanel implements ActionListener {
     }
 
     public boolean isServerOnline() {
-        return Server.isActive();
+        return Server.isAutostart();
     }
 
     public JButton getStartServerButton() {

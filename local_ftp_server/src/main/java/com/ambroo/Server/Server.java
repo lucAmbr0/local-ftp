@@ -4,7 +4,9 @@ import io.javalin.Javalin;
 import org.json.JSONObject;
 
 import com.ambroo.Main;
+import com.ambroo.Panels.ServerStatusPanel;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -17,7 +19,7 @@ import java.util.Enumeration;
 
 public class Server {
     public static Javalin app;
-    private static boolean active;
+    private static boolean autostart;
     private static int port;
     private static int filesAmount;
     private static String serverPath;
@@ -48,23 +50,11 @@ public class Server {
         });
         registerRoutes();
         app.start(port);
-        setActive(true);
-    }
-
-    public static synchronized void stopServer() {
-        if (app != null) {
-            try {
-                app.stop();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            app = null;
-        }
-        setActive(false);
     }
 
     public static void registerRoutes() {
-        if (app == null) return;
+        if (app == null)
+            return;
         app.post("/test", ctx -> {
             String question = ctx.body();
             Main.logger.info("Request received from endpoint " + getSocket() + "test ==> " + question);
@@ -80,7 +70,7 @@ public class Server {
                 password = "";
                 pswdToDownload = false;
                 pswdToUpload = false;
-                active = false;
+                autostart = false;
                 port = 5501;
                 filesAmount = 0;
                 saveConfig();
@@ -92,7 +82,7 @@ public class Server {
             password = obj.optString("psswd", "");
             pswdToDownload = obj.optBoolean("psswd_to_download", false);
             pswdToUpload = obj.optBoolean("psswd_to_upload", false);
-            active = obj.optBoolean("active", false);
+            autostart = obj.optBoolean("autostart", false);
             port = obj.optInt("port", 5501);
             filesAmount = obj.optInt("filesAmount", 0);
         } catch (IOException e) {
@@ -108,7 +98,7 @@ public class Server {
             obj.put("psswd", getPassword());
             obj.put("psswd_to_download", isPswdToDownload());
             obj.put("psswd_to_upload", isPswdToUpload());
-            obj.put("active", isActive());
+            obj.put("autostart", isAutostart());
             obj.put("port", getPort());
             obj.put("filesAmount", getFilesAmount());
             Files.writeString(configPath, obj.toString(4));
@@ -142,18 +132,104 @@ public class Server {
         return "http://" + getIp() + ":" + getPort() + "/";
     }
 
-    public static boolean isActive() { return active; }
-    public static void setActive(boolean value) { active = value; saveConfig(); }
-    public static int getPort() { return port; }
-    public static void setPort(int value) { port = value; saveConfig(); }
-    public static int getFilesAmount() { return filesAmount; }
-    public static void setFilesAmount(int value) { filesAmount = value; saveConfig(); }
-    public static String getServerPath() { return serverPath; }
-    public static void setServerPath(String value) { serverPath = value; saveConfig(); }
-    public static String getPassword() { return password; }
-    public static void setPassword(String value) { password = value; saveConfig(); }
-    public static boolean isPswdToDownload() { return pswdToDownload; }
-    public static void setPswdToDownload(boolean value) { pswdToDownload = value; saveConfig(); }
-    public static boolean isPswdToUpload() { return pswdToUpload; }
-    public static void setPswdToUpload(boolean value) { pswdToUpload = value; saveConfig(); }
+    public static boolean start() {
+        setServerStarting();
+        new Thread(() -> {
+            try {
+                Server.startServer();
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    ServerStatusPanel.setServerOnline(true);
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    ServerStatusPanel.setServerOnline(false);
+                });
+            }
+        }).start();
+        return true;
+    }
+
+    public static boolean stop() {
+        if (app != null) {
+            try {
+                app.stop();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            app = null;
+        }
+        ServerStatusPanel.setServerOnline(false);
+        return true;
+    }
+
+    private static void setServerStarting() {
+        ServerStatusPanel.serverStatusLabel.setText("Status: Starting");
+        ServerStatusPanel.serverStatusLabel.setBackground(new Color(204, 119, 34));
+        ServerStatusPanel.startServerBtn.setEnabled(false);
+        ServerStatusPanel.stopServerBtn.setEnabled(false);
+    }
+
+    public static boolean isAutostart() {
+        return autostart;
+    }
+
+    public static void setAutostart(boolean value) {
+        autostart = value;
+        saveConfig();
+    }
+
+    public static int getPort() {
+        return port;
+    }
+
+    public static void setPort(int value) {
+        port = value;
+        saveConfig();
+    }
+
+    public static int getFilesAmount() {
+        return filesAmount;
+    }
+
+    public static void setFilesAmount(int value) {
+        filesAmount = value;
+        saveConfig();
+    }
+
+    public static String getServerPath() {
+        return serverPath;
+    }
+
+    public static void setServerPath(String value) {
+        serverPath = value;
+        saveConfig();
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String value) {
+        password = value;
+        saveConfig();
+    }
+
+    public static boolean isPswdToDownload() {
+        return pswdToDownload;
+    }
+
+    public static void setPswdToDownload(boolean value) {
+        pswdToDownload = value;
+        saveConfig();
+    }
+
+    public static boolean isPswdToUpload() {
+        return pswdToUpload;
+    }
+
+    public static void setPswdToUpload(boolean value) {
+        pswdToUpload = value;
+        saveConfig();
+    }
 }

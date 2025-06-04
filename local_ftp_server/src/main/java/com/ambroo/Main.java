@@ -6,6 +6,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ambroo.Server.Server;
 import com.ambroo.Windows.MainWindow;
 import com.formdev.flatlaf.FlatLightLaf;
 // import com.formdev.flatlaf.FlatDarkLaf;
@@ -19,6 +20,7 @@ public class Main {
         setTheme();
         javax.swing.SwingUtilities.invokeLater(() -> {
             new MainWindow();
+            if (Server.isAutostart()) Server.start();
         });
     }
 
