@@ -39,9 +39,6 @@ public class ConnectedDevicesPanel extends JPanel {
         JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
         verticalBar.setUnitIncrement(30); // Increase scroll sensitivity
         add(scrollPane);
-        for (int i = 0; i < 15; i++) {
-            addDevice("Luca's Mi 11 Lite 5G", "192.168.1.62");
-        }
         revalidate();
         repaint();
     }
