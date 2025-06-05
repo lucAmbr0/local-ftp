@@ -18,13 +18,14 @@ import java.io.File;
 import java.net.URI;
 
 import com.ambroo.Panels.ServerStatusPanel;
+import com.ambroo.Panels.ConnectedDevicesPanel;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.LoginPreferencesPanel;
 import com.ambroo.Panels.FilesListPanel;
 import com.ambroo.Panels.LogPanel;
 
 public class MainWindow extends JFrame {
-    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_WIDTH = 1100;
     private static final int WINDOW_HEIGHT = 610;
     private static final int PADDING = 20;
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
@@ -44,6 +45,7 @@ public class MainWindow extends JFrame {
     private JPanel verticalSeparator = new JPanel(null);
     private FilesListPanel filesListPanel;
     private LogPanel logPanel;
+    private ConnectedDevicesPanel connectedDevicesPanel;
 
     public MainWindow() {
         this.setTitle("Local FTP Server");
@@ -80,6 +82,7 @@ public class MainWindow extends JFrame {
         passwordProtectionPanel = new LoginPreferencesPanel();
         filesListPanel = new FilesListPanel();
         logPanel = new LogPanel();
+        connectedDevicesPanel = new ConnectedDevicesPanel();
 
         // Set bounds for each panel
         serverStatusPanel.setBounds(PADDING, PADDING, 220, 210);
@@ -94,6 +97,7 @@ public class MainWindow extends JFrame {
         windowContainer.add(verticalSeparator);
         windowContainer.add(filesListPanel);
         windowContainer.add(logPanel);
+        windowContainer.add(connectedDevicesPanel);
         this.add(windowContainer);
         this.setVisible(true);
         Main.logger.info("UI loaded");
@@ -130,7 +134,7 @@ public class MainWindow extends JFrame {
         int width = this.getContentPane().getWidth();
         int height = this.getContentPane().getHeight();
         int rightX = 3 * PADDING + 220;
-        int rightWidth = width - rightX - PADDING;
+        int rightWidth = width - rightX - PADDING - 300 - PADDING; // 300 for ConnectedDevicesPanel, plus padding
         int rightHeight = height - 2 * PADDING;
         int filesListHeight = (int) (rightHeight * 2.0 / 3.0) - 5;
         int logPanelHeight = rightHeight - filesListHeight - 10;
@@ -138,6 +142,7 @@ public class MainWindow extends JFrame {
         logPanel.setBounds(rightX, PADDING + filesListHeight + 10, rightWidth, logPanelHeight);
         filesListPanel.updateInnerBounds(rightWidth, filesListHeight);
         logPanel.updateInnerBounds(rightWidth, logPanelHeight);
+        connectedDevicesPanel.setBounds(width - PADDING - 300, PADDING, 300, rightHeight);
         verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, height - 2 * PADDING);
     }
 

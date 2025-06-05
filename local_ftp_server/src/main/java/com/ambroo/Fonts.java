@@ -12,6 +12,7 @@ public class Fonts {
     public static final Font REGULAR_FONT;
     public static final Font BIG_TEXT_FONT;
     public static final Font SUBTITLE_FONT;
+    public static final Font REGULAR_BOLD_FONT;
     public static final Font INFO_FONT;
 
     static {
@@ -34,6 +35,10 @@ public class Fonts {
         ));
         REGULAR_FONT = inter.deriveFont(Map.of(
             TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR,
+            TextAttribute.SIZE, 12f
+        ));
+        REGULAR_BOLD_FONT = inter.deriveFont(Map.of(
+            TextAttribute.WEIGHT, TextAttribute.WEIGHT_HEAVY,
             TextAttribute.SIZE, 12f
         ));
         SUBTITLE_FONT = inter.deriveFont(Map.of(
