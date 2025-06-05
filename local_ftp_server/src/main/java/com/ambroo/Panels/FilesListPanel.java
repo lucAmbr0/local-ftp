@@ -20,7 +20,7 @@ public class FilesListPanel extends JPanel {
     private JScrollPane scrollPane;
     private DefaultTableModel model;
 
-    private final String[] columnNames = { "File name", "Date added", "Downloads" };
+    private final String[] columnNames = { "File name", "Date added", "Size", "Downloads" };
 
     public FilesListPanel() {
 
@@ -59,26 +59,34 @@ public class FilesListPanel extends JPanel {
 
     private void refreshFileList() {
         File dir = new File(Server.getServerPath());
-        if (!dir.exists() || !dir.isDirectory()) return;
+        if (!dir.exists() || !dir.isDirectory())
+            return;
 
         File[] files = dir.listFiles();
-        if (files == null) return;
+        if (files == null)
+            return;
 
-        model.setRowCount(0); // clear table
+        model.setRowCount(0);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         for (File file : files) {
             if (file.isFile()) {
                 String name = file.getName();
                 String date = sdf.format(new Date(file.lastModified()));
-                int downloads = 0; // placeholder, depends on your app logic
-                model.addRow(new Object[] { name, date, downloads });
+                String size = String.format("%.2f KB", file.length() / 1024.0);
+                if (file.length() >= 1024 * 1024) {
+                    size = String.format("%.2f MB", file.length() / (1024.0 * 1024.0));
+                } else if (file.length() >= 1024 * 1024 * 1024) {
+                    size = String.format("%.2f GB", file.length() / (1024.0 * 1024.0 * 1024.0));
+                }
+                int downloads = 0;
+                model.addRow(new Object[] { name, date, size, downloads });
             }
         }
     }
 
     private void startAutoRefresh() {
-        Timer timer = new Timer(1000, e -> refreshFileList()); // every 1 sec
+        Timer timer = new Timer(1000, e -> refreshFileList());
         timer.start();
     }
 }

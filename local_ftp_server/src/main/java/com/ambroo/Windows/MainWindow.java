@@ -1,15 +1,23 @@
 package com.ambroo.Windows;
 
 import com.ambroo.Main;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.net.URI;
 
 import com.ambroo.Panels.ServerStatusPanel;
-import com.ambroo.Server.Server;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.LoginPreferencesPanel;
 import com.ambroo.Panels.FilesListPanel;
@@ -17,9 +25,17 @@ import com.ambroo.Panels.LogPanel;
 
 public class MainWindow extends JFrame {
     private static final int WINDOW_WIDTH = 800;
-    private static final int WINDOW_HEIGHT = 580;
+    private static final int WINDOW_HEIGHT = 610;
     private static final int PADDING = 20;
     private static final Color BACKGROUND_COLOR = new Color(217, 217, 217);
+
+    JMenuBar menuBar = new JMenuBar();
+    JMenu helpMenu = new JMenu("Links");
+    JMenuItem appFolderLink = new JMenuItem("Open app folder", new ImageIcon(MainWindow.class.getResource("/more-icons/folder.png")));
+    JMenuItem clientLink = new JMenuItem("Open server client", new ImageIcon(MainWindow.class.getResource("/more-icons/internet.png")));
+    JMenuItem githubRepoLink = new JMenuItem("GitHub Repository", new ImageIcon(MainWindow.class.getResource("/more-icons/github.png")));
+    JMenuItem githubProfileLink = new JMenuItem("GitHub Profile", new ImageIcon(MainWindow.class.getResource("/more-icons/github.png")));
+    JMenuItem donationLink = new JMenuItem("Donate", new ImageIcon(MainWindow.class.getResource("/more-icons/kofi.png")));
 
     private JPanel windowContainer = new JPanel(null);
     private ServerStatusPanel serverStatusPanel;
@@ -41,7 +57,23 @@ public class MainWindow extends JFrame {
         windowContainer.setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         verticalSeparator.setBackground(new Color(100, 100, 100));
         verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
-        
+
+        appFolderLink.addActionListener(e -> openAppFolder());
+        clientLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0/local-ftp"));
+        githubProfileLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0"));
+        githubRepoLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0/local-ftp"));
+        donationLink.addActionListener(e -> openWebpage("https://ko-fi.com/lucAmbr0"));
+
+        helpMenu.add(appFolderLink);
+        helpMenu.add(clientLink);
+        helpMenu.add(githubProfileLink);
+        helpMenu.add(githubRepoLink);
+        helpMenu.add(donationLink);
+        // Add menu to the bar
+        menuBar.add(helpMenu);
+        // Attach the menu bar to your frame
+        setJMenuBar(menuBar);
+
         // Initialize panels
         serverStatusPanel = new ServerStatusPanel();
         directorySettingsPanel = new DirectorySettingsPanel();
@@ -66,10 +98,6 @@ public class MainWindow extends JFrame {
         this.setVisible(true);
         Main.logger.info("UI loaded");
 
-        if (Server.isAutostart()) {
-            
-        }
-
         // Responsive layout for right panels
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -78,6 +106,24 @@ public class MainWindow extends JFrame {
             }
         });
         updateRightPanelsLayout();
+    }
+
+    private void openWebpage(String url) {
+        try {
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openAppFolder() {
+        try {
+            String currentDir = System.getProperty("user.dir");
+            Desktop.getDesktop().open(new File(currentDir));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Unable to open folder.");
+        }
     }
 
     private void updateRightPanelsLayout() {

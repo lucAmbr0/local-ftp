@@ -32,6 +32,7 @@ public class LoginPreferencesPanel extends JPanel {
 
         requireNickname.setSelected(Server.isRequireNickname());
         requirePassword.setSelected(Server.isRequirePassword());
+        passwordTextField.setEnabled(Server.isRequirePassword());
         passwordTextField.setText(Server.getPassword());
 
         passwordProtectionLabel.setFont(Fonts.SUBTITLE_FONT);

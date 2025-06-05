@@ -1,9 +1,9 @@
 {
-    "serverPath": "D:\\lucaa\\Music\\MediaHuman (dest.)\\Albums\\Hurry Up Tomorrow",
-    "requirePassword": true,
+    "serverPath": "D:\\lucaa\\Music\\MediaHuman (dest.)\\Albums\\After Hours",
+    "requirePassword": false,
     "port": 5501,
     "autostart": false,
     "psswd": "gaklgjadklgadk",
-    "requireNickname": true,
+    "requireNickname": false,
     "filesAmount": 0
 }
