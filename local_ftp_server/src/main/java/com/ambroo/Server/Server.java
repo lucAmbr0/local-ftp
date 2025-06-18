@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import org.json.JSONObject;
 
 import com.ambroo.Main;
+import com.ambroo.Panels.ConnectedDevicesPanel;
 import com.ambroo.Panels.ServerStatusPanel;
 
 import java.awt.Color;
@@ -37,7 +38,7 @@ public class Server {
     public static synchronized void startServer() throws Exception {
         if (app != null) {
             try {
-                app.start(port);
+                app.start("0.0.0.0", port);
                 return;
             } catch (io.javalin.util.JavalinException ex) {
                 app = null;
@@ -49,16 +50,45 @@ public class Server {
             });
         });
         registerRoutes();
-        app.start(port);
+        app.start("0.0.0.0", port);
     }
 
     public static void registerRoutes() {
         if (app == null)
             return;
         app.post("/test", ctx -> {
+            //   fetch('/test', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'text/plain'
+            //     }
+            //     body: "example"
+            //   })
+            //   .then(res => res.text())
+            //   .then(console.log)
+            //   .catch(console.error);
             String question = ctx.body();
             Main.logger.info("Request received from endpoint " + getSocket() + "test ==> " + question);
             ctx.result("Received " + question);
+        });
+        app.post("/add-device", ctx -> {
+            // Example JS function to call this API:
+            //   fetch('/add-device', {
+            //     method: 'POST',
+            //     headers: {
+            //       'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({ 'device-name': deviceName })
+            //   })
+            //   .then(res => res.text())
+            //   .then(console.log)
+            //   .catch(console.error);
+            JSONObject requestBody = new JSONObject(ctx.body());
+            String deviceName = requestBody.getString("device-name");
+            String ipAddress = ctx.ip();
+            Main.logger.info("Device " + deviceName + " connected from " + ipAddress);
+            ConnectedDevicesPanel.addDevice(deviceName, ipAddress);
+            ctx.status(200);
         });
     }
 

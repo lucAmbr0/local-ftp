@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import com.ambroo.Fonts;
 
 public class ConnectedDevicesPanel extends JPanel {
-    private static final Color BACKGROUND_COLOR = new Color(230, 230, 230);
+    private static final Color BACKGROUND_COLOR = new Color(255, 255, 255);
     private static final int ITEM_HEIGHT = 60;
     private static final int ITEM_MARGIN = 5;
     private static final int PANEL_WIDTH = 300;
@@ -27,10 +27,11 @@ public class ConnectedDevicesPanel extends JPanel {
         setLayout(null);
         setBackground(new Color(217, 217, 217));
         titleLabel.setFont(Fonts.SUBTITLE_FONT);
-        titleLabel.setBounds(8, 0, PANEL_WIDTH - 16, 26);
+        titleLabel.setBounds(0, 0, PANEL_WIDTH - 16, 26);
         add(titleLabel);
 
         devicesContainer.setBackground(BACKGROUND_COLOR);
+        devicesContainer.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
         devicesContainer.setBounds(0, 0, PANEL_WIDTH, 1000);
         scrollPane = new JScrollPane(devicesContainer, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API TESTING</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        .container { background: #fff; padding: 24px 32px 32px 32px; border-radius: 10px; box-shadow: 0 2px 12px #0001; max-width: 480px; margin: auto; }
+        h1 { text-align: center; }
+        label { display: block; margin-top: 18px; font-weight: bold; }
+        select, input, textarea, button { width: 100%; margin-top: 6px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 1em; }
+        button { background: #0078d7; color: #fff; border: none; margin-top: 20px; cursor: pointer; }
+        button:hover { background: #005fa3; }
+        .response { margin-top: 28px; background: #f0f0f0; padding: 14px; border-radius: 6px; min-height: 40px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Tester</h1>
+        <form id="apiForm" autocomplete="off">
+            <label for="endpoint">Endpoint</label>
+            <select id="endpoint" name="endpoint">
+                <option value="/test">/test</option>
+                <option value="/add-device">/add-device</option>
+            </select>
+
+            <label for="contentType">Content-Type</label>
+            <select id="contentType" name="contentType">
+                <option value="text/plain">text/plain</option>
+                <option value="application/json">application/json</option>
+            </select>
+
+            <div id="dynamicFields"></div>
+
+            <button type="submit">Send Request</button>
+        </form>
+        <div class="response" id="responseBox"></div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
