@@ -12,8 +12,6 @@ local_ftp_server/src/main/resources/local_ftp_client/yarn-error.log*
 local_ftp_server/src/main/resources/local_ftp_client/pnpm-debug.log*
 local_ftp_server/src/main/resources/local_ftp_client/lerna-debug.log*
 local_ftp_server/src/main/resources/local_ftp_client/node_modules
-local_ftp_server/src/main/resources/local_ftp_client/dist
-local_ftp_server/src/main/resources/local_ftp_client/dist-ssr
 local_ftp_server/src/main/resources/local_ftp_client/*.local
 local_ftp_server/src/main/resources/local_ftp_client/.vscode/*
 local_ftp_server/src/main/resources/local_ftp_client/!.vscode/extensions.json

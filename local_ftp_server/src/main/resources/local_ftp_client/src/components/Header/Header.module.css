@@ -1,0 +1,20 @@
+header {
+    position: fixed;
+    top: 0;
+    width: calc(100% - 40px);
+    margin: auto 0;
+    padding: 0 20px;
+    height: 67px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--palette-100);
+    h1 {
+        margin: 0;
+        color: var(--palette-950);
+        font-size: 34px;
+        font-weight: 700;
+    }
+}

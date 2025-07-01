@@ -48,6 +48,11 @@ public class Server {
             config.bundledPlugins.enableCors(cors -> {
                 cors.addRule(it -> it.anyHost());
             });
+            // Serve static files from the correct React app's dist directory (absolute path)
+            config.staticFiles.add(
+                Paths.get("local_ftp_server", "src", "main", "resources", "local_ftp_client", "dist").toString(),
+                io.javalin.http.staticfiles.Location.EXTERNAL
+            );
         });
         registerRoutes();
         app.start("0.0.0.0", port);

@@ -1,0 +1,48 @@
+.container {
+    background-color: var(--palette-100);
+    border: solid 1px var(--palette-300);
+    width: calc(100% - 40px);
+    min-height: 100px;
+    margin: 20px 20px 87px 20px;
+    border-radius: 22px;
+}
+
+.title {
+    font-size: 34px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.form {
+    padding: 20px;
+}
+
+.label {
+    margin: 5px 0;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--palette-950);
+}
+
+.field {
+    font-family: "Inter";
+    margin: 5px 0 20px 0;
+    width: calc(100% - 16px);
+    background-color: var(--palette-200);
+    border: solid 1px var(--palette-300);
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 18px;
+    color: var(--palette-950);
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.btnContainer Button {
+    padding: 24px;
+    font-weight: 600;
+}
