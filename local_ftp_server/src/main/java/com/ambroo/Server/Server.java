@@ -57,39 +57,58 @@ public class Server {
         if (app == null)
             return;
         app.post("/test", ctx -> {
-            //   fetch('/test', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'text/plain'
-            //     }
-            //     body: "example"
-            //   })
-            //   .then(res => res.text())
-            //   .then(console.log)
-            //   .catch(console.error);
+            // fetch('/test', {
+            // method: 'POST',
+            // headers: {
+            // 'Content-Type': 'text/plain'
+            // }
+            // body: "example"
+            // })
+            // .then(res => res.text())
+            // .then(console.log)
+            // .catch(console.error);
             String question = ctx.body();
             Main.logger.info("Request received from endpoint " + getSocket() + "test ==> " + question);
             ctx.result("Received " + question);
         });
         app.post("/add-device", ctx -> {
             // Example JS function to call this API:
-            //   fetch('/add-device', {
-            //     method: 'POST',
-            //     headers: {
-            //       'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({ 'device-name': deviceName })
-            //   })
-            //   .then(res => res.text())
-            //   .then(console.log)
-            //   .catch(console.error);
+            // fetch('/add-device', {
+            // method: 'POST',
+            // headers: {
+            // 'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify({ 'device-name': deviceName })
+            // })
+            // .then(res => res.text())
+            // .then(console.log)
+            // .catch(console.error);
             JSONObject requestBody = new JSONObject(ctx.body());
             String deviceName = requestBody.getString("device-name");
             String ipAddress = ctx.ip();
+            String randomID;
+            randomID = generateRandomId();
+            Main.logger.info("Device ID: " + randomID);
+            ctx.result(randomID);
             Main.logger.info("Device " + deviceName + " connected from " + ipAddress);
             ConnectedDevicesPanel.addDevice(deviceName, ipAddress);
+            ctx.header("Access-Control-Expose-Headers", "unique-id");
+            ctx.header("unique-id", randomID);
             ctx.status(200);
         });
+    }
+
+    private static String generateRandomId() {
+        String characters = "ABCDEF0123456789";
+        StringBuilder randomId = new StringBuilder();
+        for (int i = 0; i < 20; i++) {
+            int index = (int) (Math.random() * characters.length());
+            randomId.append(characters.charAt(index));
+            if ((i + 1) % 5 == 0 && i != 19) {
+                randomId.append("-");
+            }
+        }
+        return randomId.toString();
     }
 
     public static void loadConfig() {
