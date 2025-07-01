@@ -28,6 +28,7 @@ function LoginForm() {
       </div>
       {/* <Button onClick={fixLightMode} text="Fix light mode" /> */}
     </div>
+    
   );
 
   function fixLightMode() {
