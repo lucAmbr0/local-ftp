@@ -3,10 +3,10 @@ import Button from "../Button/Button";
 
 function Header() {
   const element = (
-    <header>
-        <h1>File sharing</h1>
+    <div className={styles.container}>
+        <h1 className={styles.title}>File sharing</h1>
         <Button iconName="settings" variant="filled" />
-    </header>
+    </div>
   );
 
   return element;

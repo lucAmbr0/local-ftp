@@ -11,6 +11,7 @@
     font-size: 34px;
     font-weight: 700;
     text-align: center;
+    color: var(--palette-950);
 }
 
 .form {

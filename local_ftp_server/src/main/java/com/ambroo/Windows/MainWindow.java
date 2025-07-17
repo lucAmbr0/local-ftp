@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.URI;
 
 import com.ambroo.Panels.ServerStatusPanel;
+import com.ambroo.Server.Server;
 import com.ambroo.Panels.ConnectedDevicesPanel;
 import com.ambroo.Panels.DirectorySettingsPanel;
 import com.ambroo.Panels.LoginPreferencesPanel;
@@ -54,14 +55,14 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setIconImage(
-                Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/icons/local-ftp-server-icon.png")));
+                Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/local_ftp_client/public/icons/local-ftp-server-icon.png")));
         windowContainer.setBackground(BACKGROUND_COLOR);
         windowContainer.setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         verticalSeparator.setBackground(new Color(100, 100, 100));
         verticalSeparator.setBounds(2 * PADDING + 220, PADDING, 1, WINDOW_HEIGHT - 2 * PADDING);
 
         appFolderLink.addActionListener(e -> openAppFolder());
-        clientLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0/local-ftp"));
+        clientLink.addActionListener(e -> openWebpage("http://" + Server.getIp() + Server.getPort()));
         githubProfileLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0"));
         githubRepoLink.addActionListener(e -> openWebpage("https://github.com/lucAmbr0/local-ftp"));
         donationLink.addActionListener(e -> openWebpage("https://ko-fi.com/lucAmbr0"));

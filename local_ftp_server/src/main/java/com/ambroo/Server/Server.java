@@ -50,7 +50,7 @@ public class Server {
             });
             // Serve static files from the correct React app's dist directory (absolute path)
             config.staticFiles.add(
-                Paths.get("local_ftp_server", "src", "main", "resources", "local_ftp_client", "dist").toString(),
+                Paths.get("src", "main", "resources", "local_ftp_client", "dist").toString(),
                 io.javalin.http.staticfiles.Location.EXTERNAL
             );
         });

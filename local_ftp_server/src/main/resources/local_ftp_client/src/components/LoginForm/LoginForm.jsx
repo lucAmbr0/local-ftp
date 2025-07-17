@@ -1,8 +1,11 @@
 import styles from "./LoginForm.module.css";
 import { useData } from "../../scripts/useData";
 import Button from "../Button/Button";
+import { useState } from "react";
 
 function LoginForm() {
+  const [nickname, setNickname] = useState();
+  const [password, setPassword] = useState();
   const [data, setData] = useData();
 
   const element = (
@@ -16,20 +19,31 @@ function LoginForm() {
           id="nickname"
           className={styles.field}
           type="text"
+          value={nickname || ""}
+          onChange={e => setNickname(e.target.value)}
           placeholder={data.settings.nickname}
         />
         <label htmlFor="password" className={styles.label}>
           Password
         </label>
-        <input id="password" className={styles.field} type="password" />
+        <input
+          id="password"
+          className={styles.field}
+          type="password"
+          value={password || ""}
+          onChange={e => setPassword(e.target.value)}
+        />
         <div className={styles.btnContainer}>
-          <Button text="Login" border="rounded" iconName="arrow_forward" />
+          <Button onClick={attemptLogin} text="Login" border="rounded" iconName="arrow_forward" />
         </div>
       </div>
       {/* <Button onClick={fixLightMode} text="Fix light mode" /> */}
     </div>
-    
   );
+
+  function attemptLogin() {
+    
+  }
 
   function fixLightMode() {
     const newData = { ...data };
